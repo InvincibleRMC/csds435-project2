@@ -8,9 +8,11 @@ from sklearn import preprocessing
 
 from sklearn.decomposition import PCA
 
-from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import rand_score
+
+
+from cluster import Cluster, KMeans, Spectral, DensityBased
 
 
 def main() -> None:
@@ -37,13 +39,14 @@ def main() -> None:
         filename = "iyer.txt"
         class_count = 10
 
+    cluster: Cluster
     match args.algorithm:
         case "K_Means":
-            algorithm_type = 1
+            cluster = KMeans(class_count)
         case "Density_Based":
-            algorithm_type = 2
+            cluster = KMeans(class_count)
         case "Spectral":
-            algorithm_type = 3
+            cluster = DensityBased(class_count)
         case _:
             raise Exception()
 
@@ -66,10 +69,10 @@ def main() -> None:
     X_train_norm = preprocessing.normalize(X_train)
     X_test_norm = preprocessing.normalize(X_test)
 
-    kmeans = KMeans(n_clusters=class_count, random_state=0, n_init="auto")
-    kmeans.fit(X_train_norm)
+    cluster.train(X_train_norm, y_train)
 
-    predicted_y_test = kmeans.predict(X_test_norm)
+    predicted_y_train = cluster.predict(X_train_norm)
+    predicted_y_test = cluster.predict(X_test_norm)
 
     print(f"Rand Index for {filename} is {rand_score(y_test, predicted_y_test)}")
 
@@ -82,7 +85,7 @@ def main() -> None:
     pca_y = pca_result[:, 1]
 
     plt.figure()
-    sns.scatterplot(x=pca_x, y=pca_y, hue=kmeans.labels_)
+    sns.scatterplot(x=pca_x, y=pca_y, hue=predicted_y_train)
     plt.show()
 
 
