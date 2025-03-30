@@ -60,9 +60,13 @@ class DensityBased(Cluster):
     @override
     def __init__(
         self, cluster_count: int,
+        isCho: bool = True
     ) -> None:
         
-        self.cluster = DBSCAN(min_samples=cluster_count)
+        if isCho:
+            self.cluster = DBSCAN(min_samples=4)
+        else:
+            self.cluster = DBSCAN(eps=0.25, min_samples=4)
         
     @override
     def train(self, x_train: ArrayLike, y_train: ArrayLike) -> None:

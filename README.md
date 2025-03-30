@@ -7,4 +7,4 @@ Create a python venv.
 
 Install dependencies from requirements.txt
 
-Run main.ipynb
+Run main.py

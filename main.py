@@ -44,9 +44,9 @@ def main() -> None:
         case "K_Means":
             cluster = KMeans(class_count)
         case "Density_Based":
-            cluster = KMeans(class_count)
+            cluster = DensityBased(class_count, filename == "cho.txt")
         case "Spectral":
-            cluster = DensityBased(class_count)
+            cluster = Spectral(class_count)
         case _:
             raise Exception()
 
@@ -86,6 +86,7 @@ def main() -> None:
 
     plt.figure()
     sns.scatterplot(x=pca_x, y=pca_y, hue=predicted_y_train)
+    plt.title(f"PCA Visualization for Algorithm {args.algorithm} on Dataset {args.dataset.capitalize()}")
     plt.show()
 
 
